@@ -11,26 +11,33 @@ source:
 
 build:
   number: 0
-  script: {{ PYTHON }} -m pip install . -vv
-  noarch: python
+  skip: True  # [py<35]
+  script: {{ PYTHON }} -m pip install . -vv --no-deps
 
 requirements:
   host:
+    - python
+    - numpy
     - pip
-    - python >=3.5
+    - setuptools
+    - wheel
   run:
-    - python >=3.5
+    - python
     - pandas >=0.23
-    - numpy >=1.15
+    - {{ pin_compatible('numpy') }}
     - matplotlib-base >=3.0
     - scikit-learn >=0.20
-    - statsmodels <0.11,>=0.9
+    - statsmodels >=0.9
     - packaging >=17.0
     - tabulate >=0.8
 
 test:
   imports:
     - adtk
+  requires:
+    - pip
+  commands:
+    - pip check
 
 about:
   home: https://github.com/arundo/adtk
@@ -43,6 +50,8 @@ about:
     with unified APIs, as well as pipe classes that connect them together into 
     models. It also provides some functions to process and visualize 
     time series and anomaly events.
+  dev_url: https://github.com/arundo/adtk
+  doc_url: https://github.com/arundo/adtk
 
 extra:
   recipe-maintainers:
